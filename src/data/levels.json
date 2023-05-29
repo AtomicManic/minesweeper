@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Easy",
+    "rows": 7,
+    "columns": 7,
+    "mines": 9
+  },
+  {
+    "id": 2,
+    "name": "Medium",
+    "rows": 10,
+    "columns": 10,
+    "mines": 13
+  },
+  {
+    "id": 3,
+    "name": "Hard",
+    "rows": 13,
+    "columns": 13,
+    "mines": 20
+  }
+]
