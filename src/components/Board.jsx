@@ -5,7 +5,6 @@ import { reveal } from "../util/reveal";
 import LevelPicker from "./LevelPicker";
 import levels from "../data/levels.json";
 import { getNonMinesCount } from "../util/reveal";
-import Timer from "./Timer";
 
 const Board = () => {
   const [grid, setGrid] = useState([]);
@@ -15,6 +14,7 @@ const Board = () => {
   const [cellsLeft, setCellsLeft] = useState(0);
   const [flags, setFlegs] = useState(0);
   const [didWin, setDidWin] = useState(false);
+  const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
     getNewBoard();
@@ -22,6 +22,7 @@ const Board = () => {
 
   const handleNewGame = () => {
     setDidWin(false);
+    setSeconds(0);
     getNewBoard();
   };
 
@@ -33,6 +34,7 @@ const Board = () => {
     setGameActive(true);
     setCellsLeft(rows * columns - mines);
     setDidWin(false);
+    setFlegs(0);
   };
 
   const determineLevel = () => {
@@ -52,7 +54,7 @@ const Board = () => {
   const updateFlag = (e, x, y) => {
     e.preventDefault();
     let flagNum;
-    if (!gameActive || grid[x][y].revealed) return;
+    if (!gameActive || grid[x][y].revealed || didWin) return;
     let newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[x][y].flagged) {
       newGrid[x][y].flagged = false;
@@ -92,6 +94,9 @@ const Board = () => {
     for (let i = 0; i < mineLocations.length; i++) {
       newGrid[mineLocations[i][0]][mineLocations[i][1]].value = -1;
     }
+    // handle timer
+    //  ...
+    // set grid
     setGrid(newGrid);
   };
 
@@ -153,7 +158,7 @@ const Board = () => {
         })}
       </div>
       <div id="timer-counter-container">
-        <div id="counter">{cellsLeft}</div>
+        <div id="cell-counter">{cellsLeft}</div>
         <button
           onClick={() => handleNewGame()}
           onMouseDown={handleSmileyDown}
@@ -173,7 +178,9 @@ const Board = () => {
             }
           ></i>
         </button>
-        <div id="timer">100</div>
+        <div id="flags-counter">
+          {flags}/{mineLocations.length}
+        </div>
       </div>
       <div className={didWin ? "green-border" : ""}>
         {grid.map((singleRow) => {
